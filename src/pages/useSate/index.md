@@ -10,7 +10,7 @@ cta: 'react'
 const [state, setState] = useState()
 ```
 
-> React 保证 setState 函数在重新渲染中是不变的，所以可以在 useEffect 或 userCallback 的依赖列表中省略
+> React 保证 setState 函数在**重新渲染中是不变的**，所以可以在 useEffect 或 userCallback 的依赖列表中省略
 
 ### 懒惰初始化
 ```jsx
@@ -27,12 +27,15 @@ function Table(props) {
   // ...
 }
 ```
-这俩的区别是，第一个是函数执行，相当于
+首先来看下这两个的区别，第一个是函数执行，相当于
 ```jsx
 const value = createRows(props.count);
 const [rows, setRows] = useState(value);
 ```
-所以每次都执行，但 rows 的值是不变的，除非调用 setRows ；第二个是函数定义，只会在初始化的时候执行一次。
+所以在 re-render 时每次都执行，但是 rows 的值是不变的，除非调用 setRows ；
+第二个是函数定义，只会在初始化的时候执行一次。
+
+第二个就是懒惰初始化，避免一些昂贵的计算重复执行。
 
 ## 更新
 useState 没有 this.setState 那样的回调函数，可以在确保 state 改变后再做些什么。但是可以借助 useEffect 来实现。
