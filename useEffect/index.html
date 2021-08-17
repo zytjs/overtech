@@ -76,8 +76,8 @@
 <p>？？？：react 是怎么知道浏览器布局和绘制完成了呢，定时查询？所以会有<strong>延迟</strong>执行？</p>
 </blockquote>
 <h2 id="在任意一次渲染中，props-和-state-是始终保持不变的"><a href="#%E5%9C%A8%E4%BB%BB%E6%84%8F%E4%B8%80%E6%AC%A1%E6%B8%B2%E6%9F%93%E4%B8%AD%EF%BC%8Cprops-%E5%92%8C-state-%E6%98%AF%E5%A7%8B%E7%BB%88%E4%BF%9D%E6%8C%81%E4%B8%8D%E5%8F%98%E7%9A%84" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>在任意一次渲染中，props 和 state 是始终保持不变的</h2>
-<p>也就是说在不同渲染中的 props 和 state 是相互独立的，使用到它们的任何值也是独立的（包括事件处理函数）。它们都属于一次特定的渲染，即使是事件处理函数中的异步函数，其中使用的值也是当次渲染的值。不会因为延迟使用最新的状态值。
-来用一个实际的情况佐证一下：</p>
+<p>也就是说在不同渲染中的 props 和 state 是相互独立的，使用到它们的任何值也是独立的（包括事件处理函数）。它们都属于一次特定的渲染，即使是事件处理函数中的异步函数，其中使用的值也是当次渲染的值。不会因为延迟使用最新的状态值。<br>
+用一个实际的情况佐证一下：</p>
 <div class="gatsby-highlight" data-language="jsx"><pre class="language-jsx"><code class="language-jsx"><span class="token keyword">function</span> <span class="token function">Counter</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token keyword">const</span> <span class="token punctuation">[</span>count<span class="token punctuation">,</span> setCount<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
 
@@ -103,11 +103,11 @@
 <p><a href="https://overreacted.io/zh-hans/how-are-function-components-different-from-classes/" target="_blank" rel="nofollow noopener noreferrer">函数式组件与类组件有何不同？</a></p>
 </blockquote>
 <h2 id="每次渲染都有它自己的-effects"><a href="#%E6%AF%8F%E6%AC%A1%E6%B8%B2%E6%9F%93%E9%83%BD%E6%9C%89%E5%AE%83%E8%87%AA%E5%B7%B1%E7%9A%84-effects" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>每次渲染都有它自己的 Effects</h2>
-<p>和组件中其它的事件处理函数一样，每次渲染都会产生属于那次渲染的 effect 函数。其中的变量也是那次渲染中的值。
+<p>和组件中其它的事件处理函数一样，每次渲染都会产生属于那次渲染的 effect 函数。其中的变量也是那次渲染中的值。<br>
 如果想在 effect 的回调函数中使用最新的值，而不是捕获的当前渲染的值，可以使用 refs。值得注意的是，如果想要在过去的渲染中定义的函数里，读取“未来”的 props 和 state，这种方式有打破默认范式的意味，可能会导致代码的脆弱性，如果有其它方式代替逻辑，最好使用其它方式。</p>
 <h2 id="effect-中的清理"><a href="#effect-%E4%B8%AD%E7%9A%84%E6%B8%85%E7%90%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>effect 中的清理</h2>
-<p>effect 执行是在浏览器绘制之后，effect 的清除同样被延迟了。
-上一个组件中 effect 的清除函数，会在下一个组件绘制到浏览器之后，执行 useEffect 之前执行。也就是说上一个组件的清除和下一个组件的 effect 执行时机是一致的，只是前者更早。
+<p>effect 执行是在浏览器绘制之后，effect 的清除同样被延迟了。<br>
+上一个组件中 effect 的清除函数，会在下一个组件绘制到浏览器之后，执行 useEffect 之前执行。也就是说上一个组件的清除和下一个组件的 effect 执行时机是一致的，只是前者更早。<br>
 上一个组件和下一个组件可以是两个不同的函数组件，也可以是同一个函数组件的两次渲染。假如是同一个组件，上次渲染时产生的清除函数会在下一次渲染的绘制之后，effect 之前执行。</p>
 <p>看一下下面的代码：</p>
 <div class="gatsby-highlight" data-language="jsx"><pre class="language-jsx"><code class="language-jsx"><span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
@@ -124,11 +124,11 @@
 <li>执行 id 为 20 时的 effect
 可以看到，hooks 中 UI 的优先级更高，更注重用户体验，这也是 hooks 的“心智模型”之一。</li>
 </ul>
-<p>那么，清除函数为什么还能拿到 id 为 10 的 props 呢？
+<p>那么，清除函数为什么还能拿到 id 为 10 的 props 呢？<br>
 答案就在上面，<strong>effect 拿到的总是定义它的那次渲染中的 props 和 state</strong>。一帧一帧的函数…有那么一丝感觉了吧～</p>
 <h2 id="同步，而非生命周期"><a href="#%E5%90%8C%E6%AD%A5%EF%BC%8C%E8%80%8C%E9%9D%9E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>同步，而非生命周期</h2>
-<p>从上面可以看到，Hooks 讲究的是初始渲染和后续更新的同步，而不是生命周期的复杂概念。
-react 的每一次渲染所执行的函数、变量基本是一致的，这减少了程序的“熵”，不会让程序随着状态越来越多、更新越来越多，堆积越来越多的变化组合，导致定位 bug 很艰难。Hooks 的优势就在于每一次更新相当于重新开始，没有累积变化，程序看起来就会清晰很多。
+<p>从上面可以看到，Hooks 讲究的是初始渲染和后续更新的同步，而不是生命周期的复杂概念。<br>
+react 的每一次渲染所执行的函数、变量基本是一致的，这减少了程序的“熵”，不会让程序随着状态越来越多、更新越来越多，堆积越来越多的变化组合，导致定位 bug 很艰难。Hooks 的优势就在于每一次更新相当于重新开始，没有累积变化，程序看起来就会清晰很多。<br>
 同步是指，React 根据当前的 props 和 state 同步修改到 Dom。没有像类组件的 “mount” 和 “update” 那样的生命周期。effect 也是类似的“心智模型”，在浏览器渲染之后，根据当前的状态，同步做 React tree 之外的修改。</p>
 <h2 id="依赖"><a href="#%E4%BE%9D%E8%B5%96" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>依赖</h2>
 <p>effect 的依赖可以条件式的避免渲染，只在变化的时候执行。
@@ -138,7 +138,7 @@ react 的每一次渲染所执行的函数、变量基本是一致的，这减�
 <li>useReducer
 使用 useCallback 常量化函数依赖</li>
 </ul>
-<p>[] 依赖比较接近类组件的 componentDidMount 和 componentWillUnmount，在这里可以执行一次第一次渲染和卸载时的逻辑。
+<p>[] 依赖比较接近类组件的 componentDidMount 和 componentWillUnmount，在这里可以执行一次第一次渲染和卸载时的逻辑。<br>
 但是如果有些依赖尝试了以上方式后仍不可避免，那么只能在 effect 中使用条件判断的方式去执行某些逻辑，尽管这种方式可能打断了函数式组件同步执行的模型，但是好像没有什么更好的办法。</p></div><footer><p><a href="https://github.com/zitup/overblog" target="_blank" rel="noopener noreferrer">Discuss on GitHub</a></p></footer></article></main><aside><div style="margin:90px 0 40px 0;font-family:system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;,
     &quot;Roboto&quot;, &quot;Oxygen&quot;, &quot;Ubuntu&quot;, &quot;Cantarell&quot;, &quot;Fira Sans&quot;,
     &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif"></div><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--pink)" href="/overblog/">Overblog</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/overblog/static/profile-pic-b180123675981fd40271acaadb8353f9.jpeg" alt="zhaoyutong" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px">Personal blog by <a href="https://github.com/zitup">zit</a>.<!-- --> <!-- --> Just write something.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/overblog/useSate/">← <!-- -->useState 的全部</a></li><li></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/useEffect/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-5a3df58896fcdbb20db6.js"],"app":["/app-c58271f67fdcc0437285.js"],"component---src-pages-404-js":["/component---src-pages-404-js-cf1e5fd6591a9343a499.js"],"component---src-pages-confirm-js":["/component---src-pages-confirm-js-5cf513ee5657583bc5c9.js"],"component---src-pages-react-components-unsubscribed-js":["/component---src-pages-react-components-unsubscribed-js-7fc4f132e19bf88d210b.js"],"component---src-pages-thanks-js":["/component---src-pages-thanks-js-858b1df087138dfcf97b.js"],"component---src-templates-blog-index-js":["/component---src-templates-blog-index-js-a672bc4f9c5e55d17502.js"],"component---src-templates-blog-post-js":["/component---src-templates-blog-post-js-989b82bc4ed1002325ef.js"]};/*]]>*/</script><script src="/overblog/polyfill-5a3df58896fcdbb20db6.js" nomodule=""></script><script src="/overblog/component---src-templates-blog-post-js-989b82bc4ed1002325ef.js" async=""></script><script src="/overblog/bc9699c34271943da8277b99b074a5b8731a0b8b-67b9dbee34e5849c496a.js" async=""></script><script src="/overblog/commons-06b70d477f9bc7520388.js" async=""></script><script src="/overblog/styles-407fe62976dc5310c43e.js" async=""></script><script src="/overblog/app-c58271f67fdcc0437285.js" async=""></script><script src="/overblog/framework-3a07bb01dd6a58531acd.js" async=""></script><script src="/overblog/webpack-runtime-1dd67b4564f7f0f39ee8.js" async=""></script></body></html>
