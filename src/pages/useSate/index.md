@@ -153,5 +153,6 @@ promise.then(() => {
   // When we exit unstable_batchedUpdates, re-renders once
 })
 ```
+
 React event handlers 默认被包含在 unstable_batchedUpdates，所以它们可以批量更新。在其他地方可以强制使用 unstable_batchedUpdates，当 unstable_batchedUpdates 结束时，更新会被刷新到界面。
 3. useReducer
