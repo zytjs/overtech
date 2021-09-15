@@ -1,13 +1,15 @@
 ---
-title: useContext 的全部
+title: Context 的全部
 date: '2021-09-02'
 spoiler: 一文搞懂 useContext
 cta: 'react'
 ---
 
-Context 提供了一个不用向每层组件手动添加 props，就能在组件树之间进行数据传递的方法。
+React Context 提供了一个不用向每层组件手动添加 props，就能在组件树之间进行数据传递的方法。
 
-它要解决的问题是，当孙子组件需要使用爷爷组件的变量时，在父组件上进行了实际上无用的传递。React 数据一般通过 props 由父到子传递，context 提供了一种在组件间共享数据的方式，不用我们显示的层层传递数据。
+## 为什么需要 Context
+
+当孙子组件需要使用爷爷组件的变量时，需要在父组件上进行实际上无用的传递。React 数据一般通过 props 由父到子传递，context 提供了一种在组件间共享数据的方式，不用我们显示的层层传递数据。
 
 ## 使用 Context 之前的考虑
 
@@ -15,7 +17,7 @@ Context 提供了一个不用向每层组件手动添加 props，就能在组件
 
 考虑到 context 解决的问题，有时候可以使用组件组合。这种方式是要把需要使用数据的组件提升到高层次组件，然后将组件本身层层传递下去。但是将底层逻辑提升，首先会污染高层组件，使它更复杂，然后还具有传染性，后面的组件还是需要向下层层传递。而且被提升的组件需要和父组件完全解耦，限制也较多。
 
-## API
+## 如何使用
 
 ### React.createContext 、Context.Provider
 
@@ -27,13 +29,19 @@ const MyContext = React.createContext(defaultValue)
 </MyContext.Provider>
 ```
 
-**只有**当组件所处的树中没有匹配到 Provider 时，其 defaultValue 参数才会生效。注意：将 undefined 传递给 Provider 的 value 时，消费组件的 defaultValue 不会生效（有点类似解构赋值时，只有在 undefined 下赋值才有用）。
+**只有**当组件所处的树中没有匹配到 Provider 时，其 defaultValue 参数才会生效。注意：将 undefined 传递给 Provider 的 value 时，消费组件的 defaultValue 不会生效（有点类似解构赋值时，只有在 undefined 下赋值才会生效）。
 
 Provider 接收一个 value 属性，传递给消费组件。多个 Provider 也可以嵌套使用，里层的会覆盖外层的数据。
 
-当 Provider 的 value 值发生变化时，它内部的**所有**消费组件都会重新渲染。这是因为更新 value 值一般是使用 setState，所以为引发后代更新。从 Provider 到其后代 consumer 组件的传播，不受制于 shouldComponentUpdate 函数，因此当 consumer 组件在其祖先组件跳过更新的情况下也能更新。
+当 Provider 的 value 值发生变化时，它内部的**所有**消费组件都会重新渲染。这是因为更新 value 值一般是使用 setState，所以会引发后代更新。从 Provider 到其后代 consumer 组件的传播，不受制于 shouldComponentUpdate 函数，因此当 consumer 组件在其祖先组件跳过更新的情况下也能更新。
 
->> 那么在 context 更新时，如何避免重复渲染呢？
+这里的所有消费组件指 Provider 的所有后代。可以想到，订阅了 context 的后代重新渲染很合理，那么没有订阅的也要重新渲染，是不是有点浪费呢，怎么避免这些无效的重复渲染呢？
+
+  - 合理组织组件结构
+    将需要使用的消费组件放到 Provider 中，其它的放到外部。这种方式仅适用于根组件，假如在消费组件中存在未使用 context 的组件，还是会重新渲染。
+  - 使用 pureComponent
+    或者 shouldComponentUpdate 可以避免 class 组件的更新，也不影响 context 继续向下传播。
+  - 使用
 
 ### Class.contextType  
 
